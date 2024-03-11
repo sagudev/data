@@ -1,0 +1,45 @@
+name: Run benchmarks
+on:
+    schedule:
+      # Run every day at midnight.
+      - cron: "0 0 * * *"
+
+jobs:
+  benchmark:
+    name: run benchmarks
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: boa-dev/boa
+          path: boa
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            boa/target
+            !boa/target/doc_upload
+            ~boa/.cargo/git
+            ~boa/.cargo/registry
+          key: ${{ runner.os }}-cargo-doc-bench-${{ hashFiles('**/Cargo.lock') }}
+      - name: Checkout the website-data repository
+        uses: actions/checkout@v4
+        with:
+          path: website-data
+      - name: Run benchmark
+        run: |
+            cd boa
+            cargo bench -p boa_engine -- --output-format bencher | tee ../website-data/output.txt
+            cd ../website-data
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1.19.3
+        with:
+          name: Boa Benchmarks
+          tool: "cargo"
+          output-file-path: output.txt
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
