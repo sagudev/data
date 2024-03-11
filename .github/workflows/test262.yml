@@ -44,7 +44,7 @@ jobs:
           path: website-data
       - name: Commit files
         run: |
-          cp -r ./results/test262/* .website-data/test262/
+          cp -r ./results/test262/* ./website-data/test262/
           cd website-data
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
