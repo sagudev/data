@@ -19,11 +19,9 @@ jobs:
           submodules: true
           path: boa
       - name: Install the Rust toolchain
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          override: true
-          profile: minimal
       - name: Cache cargo
         uses: actions/cache@v4
         with:
@@ -40,10 +38,14 @@ jobs:
           mkdir ../results
           cargo run --release --bin boa_tester -- run -v -o ../results/test262
           cd ..
-
+      - name: Checkout the website-data repository
+        uses: actions/checkout@v4
+        with:
+          path: website-data
       - name: Commit files
         run: |
-          cp -r ./results/test262/* ./test262/
+          cp -r ./results/test262/* .website-data/test262/
+          cd website-data
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add test262
