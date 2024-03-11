@@ -6,7 +6,6 @@ on:
 
 jobs:
   benchmark:
-    if: ${{ github.actor != 'dependabot[bot]' }}
     name: run benchmarks
     runs-on: ubuntu-latest
     timeout-minutes: 120
@@ -15,11 +14,9 @@ jobs:
         with:
           repository: boa-dev/boa
           path: boa
-      - uses: actions-rs/toolchain@v1.0.7
+      - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          override: true
-          profile: minimal
       - name: Cache cargo
         uses: actions/cache@v4
         with:
@@ -29,10 +26,15 @@ jobs:
             ~boa/.cargo/git
             ~boa/.cargo/registry
           key: ${{ runner.os }}-cargo-doc-bench-${{ hashFiles('**/Cargo.lock') }}
+      - name: Checkout the website-data repository
+        uses: actions/checkout@v4
+        with:
+          path: website-data
       - name: Run benchmark
         run: |
             cd boa
-            cargo bench -p boa_engine -- --output-format bencher | tee output.txt
+            cargo bench -p boa_engine -- --output-format bencher | tee ../website-data/output.txt
+            cd ../website-data
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1.19.3
         with:
