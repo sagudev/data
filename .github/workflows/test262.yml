@@ -14,7 +14,7 @@ jobs:
       - name: Checkout the main Boa repository
         uses: actions/checkout@v4
         with:
-          repository: boa-dev/boa
+          repository: jasonwilliams/boa
           submodules: true
           path: boa
       - name: Install the Rust toolchain
