@@ -3,6 +3,7 @@ on:
   schedule:
     # Run every day at midnight.
     - cron: "0 0 * * *"
+  workflow_dispatch:
 
 jobs:
   run_test262:
@@ -39,14 +40,7 @@ jobs:
           cargo run --release --bin boa_tester -- run -v -o ../results/test262
           cd ..
 
-      # Commit changes to GitHub pages.
-      - name: Checkout GitHub pages
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
       - name: Commit files
-        if: github.event_name == 'push'
         run: |
           cp -r ./results/test262/* ./test262/
           git config --local user.email "action@github.com"
