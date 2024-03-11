@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jasonwilliams/boa
+          ref: remove-ghpages
           submodules: true
           path: boa
       - name: Install the Rust toolchain
