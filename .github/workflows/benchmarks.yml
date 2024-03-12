@@ -1,8 +1,8 @@
 name: Run benchmarks
 on:
-    schedule:
-      # Run every day at midnight.
-      - cron: "0 0 * * *"
+  schedule:
+    # Run every day at midnight.
+    - cron: "0 0 * * *"
 
 jobs:
   benchmark:
@@ -32,14 +32,13 @@ jobs:
           path: website-data
       - name: Run benchmark
         run: |
-            cd boa
-            cargo bench -p boa_engine -- --output-format bencher | tee ../website-data/output.txt
-            cd ../website-data
+          cd boa
+          cargo bench -p boa_engine -- --output-format bencher | tee ../website-data/output.txt
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1.19.3
         with:
           name: Boa Benchmarks
           tool: "cargo"
-          output-file-path: output.txt
+          output-file-path: website-data/output.txt
           auto-push: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
