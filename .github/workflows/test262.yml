@@ -37,14 +37,14 @@ jobs:
           cd boa
           mkdir ../results
           cargo run --release --bin boa_tester -- run -v -o ../results/test262
-      - name: Checkout the website-data repository
+      - name: Checkout the data repository
         uses: actions/checkout@v4
         with:
-          path: website-data
+          path: data
       - name: Commit files
         run: |
-          cp -r ./results/test262/* ./website-data/test262/
-          cd website-data
+          cp -r ./results/test262/* ./data/test262/
+          cd data
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add test262
@@ -54,4 +54,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-          directory: website-data
+          directory: data

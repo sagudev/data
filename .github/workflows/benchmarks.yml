@@ -26,19 +26,19 @@ jobs:
             ~boa/.cargo/git
             ~boa/.cargo/registry
           key: ${{ runner.os }}-cargo-doc-bench-${{ hashFiles('**/Cargo.lock') }}
-      - name: Checkout the website-data repository
+      - name: Checkout the data repository
         uses: actions/checkout@v4
         with:
-          path: website-data
+          path: data
       - name: Run benchmark
         run: |
           cd boa
-          cargo bench -p boa_engine -- --output-format bencher | tee ../website-data/output.txt
+          cargo bench -p boa_engine -- --output-format bencher | tee ../data/output.txt
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1.19.3
         with:
           name: Boa Benchmarks
           tool: "cargo"
-          output-file-path: website-data/output.txt
+          output-file-path: data/output.txt
           auto-push: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
