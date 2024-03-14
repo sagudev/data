@@ -1,8 +1,9 @@
 name: Run benchmarks
 on:
   schedule:
-    # Run every day at midnight.
-    - cron: "0 0 * * *"
+    # Run every day a bit after test262
+    - cron: "0 1 * * *"
+  workflow_dispatch:
 
 jobs:
   benchmark:
@@ -22,7 +23,6 @@ jobs:
         with:
           path: |
             boa/target
-            !boa/target/doc_upload
             ~boa/.cargo/git
             ~boa/.cargo/registry
           key: ${{ runner.os }}-cargo-doc-bench-${{ hashFiles('**/Cargo.lock') }}
@@ -33,12 +33,26 @@ jobs:
       - name: Run benchmark
         run: |
           cd boa
-          cargo bench -p boa_engine -- --output-format bencher | tee ../data/output.txt
+          cargo bench -p boa_engine -- --output-format bencher | tee output.txt
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1.19.3
         with:
           name: Boa Benchmarks
           tool: "cargo"
-          output-file-path: data/output.txt
-          auto-push: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          output-file-path: output.txt
+          external-data-json-path: ../data/bench/data.json
+          auto-push: false
+          skip-fetch-gh-pages: true
+      - name: Commit files
+        run: |
+          cd ../data
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add bench
+          git commit -m "Add new benchmark results" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          directory: data
