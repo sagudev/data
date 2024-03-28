@@ -15,6 +15,7 @@ jobs:
         with:
           repository: boa-dev/boa
           path: boa
+          fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
