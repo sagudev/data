@@ -37,6 +37,9 @@ jobs:
           cargo bench -p boa_engine -- --output-format bencher | tee output.txt
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1.19.3
+        env:
+          GITHUB_REPOSITORY: boa-dev/boa
+          GITHUB_REF: refs/heads/main
         with:
           name: Boa Benchmarks
           tool: "cargo"
