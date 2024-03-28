@@ -44,6 +44,7 @@ jobs:
           external-data-json-path: ../data/bench/data.json
           auto-push: false
           skip-fetch-gh-pages: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit files
         run: |
           cd ../data
