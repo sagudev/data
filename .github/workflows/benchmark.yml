@@ -49,12 +49,12 @@ jobs:
           npm i -g esvu
           esvu install quickjs
           tree -L 3 .
-          ./quickjs ../data/bench/bench-v8/combined.js > ../data/bench/quickjs_results.json
+          ./bin/quickjs ../data/bench/bench-v8/combined.js > ../data/bench/quickjs_results.json
 
       - name: Benchmarking V8
         run: |
           esvu install v8
-          ./v8 ../data/bench/bench-v8/combined.js > ../data/bench/v8_results.json
+          ./bin/v8 ../data/bench/bench-v8/combined.js > ../data/bench/v8_results.json
 
       - name: Benchmarking Boa
         run: |
