@@ -42,25 +42,29 @@ jobs:
           tar xvfJ duktape-2.7.0.tar.xz
           cd duktape-2.7.0
           make -f Makefile.cmdline
-          ./duk ../data/bench/bench-v8/combined.js > ../data/bench/duktape_results.json
+          ./duk ../data/bench/bench-v8/combined.js > ../data/bench/duktape_results.txt
       - uses: actions/setup-node@v4
       - name: Benchmarking quickJS
         run: |
           npm i -g esvu
           esvu install quickjs
-          ./bin/quickjs data/bench/bench-v8/combined.js > data/bench/quickjs_results.json
+          ./bin/quickjs data/bench/bench-v8/combined.js > data/bench/quickjs_results.txt
 
-      - name: Benchmarking V8
+      - name: Benchmarking V8 --jitless
         run: |
           esvu install v8
-          tree -L 3 .
-          ./bin/v8 data/bench/bench-v8/combined.js > data/bench/v8_results.json
+          ./bin/v8 --jitless data/bench/bench-v8/combined.js > data/bench/v8_results.txt
+
+      - name: Benchmarking LibJS
+        run: |
+          esvu install libjs
+          ./bin/serenity-js data/bench/bench-v8/combined.js > data/bench/libjs_results.txt
 
       - name: Benchmarking Boa
         run: |
           cd boa
           cargo build --release --bin boa
-          cargo run --release --bin boa -- ../data/bench/bench-v8/combined.js > ../data/bench/boa_results.json
+          cargo run --release --bin boa -- ../data/bench/bench-v8/combined.js > ../data/bench/boa_results.txt
 
     #   - name: Commit files
     #     run: |

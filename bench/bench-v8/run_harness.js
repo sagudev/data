@@ -13,7 +13,7 @@ function Run() {
 var harnessErrorCount = 0;
 
 function ShowProgress(name) {
-  // print("PROGRESS", name);
+  print("PROGRESS", name);
 }
 
 function AddError(name, error) {
@@ -23,18 +23,14 @@ function AddError(name, error) {
 }
 
 function AddResult(name, result) {
-  // print("RESULT", name, result);
-  // Print result in JSON format
-  print('  "' + name + '":' + result + ",");
+  print("RESULT", name, result);
 }
 
 function AddScore(score) {
-  print('  "score": ' + score + ",");
-  print("}");
+  print("SCORE", score);
 }
 
 try {
-  print("{");
   Run();
 } catch (e) {
   print("*** Run() failed");
