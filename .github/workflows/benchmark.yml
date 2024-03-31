@@ -10,6 +10,8 @@ jobs:
     name: Run the benchmarks
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      ESVU_PATH: ${{ github.workspace }}
     steps:
       - name: Checkout the data repository
         uses: actions/checkout@v4
@@ -43,8 +45,6 @@ jobs:
           ./duk ../data/bench/bench-v8/combined.js > ../data/bench/duktape_results.json
       - uses: actions/setup-node@v4
       - name: Benchmarking quickJS
-        env:
-          ESVU_PATH: ${{ github.workspace }}
         run: |
           npm i -g esvu
           esvu install quickjs
