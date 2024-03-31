@@ -34,15 +34,34 @@ jobs:
             ~/.cargo/registry
           key: ${{ runner.os }}-cargo-benchmarks-${{ hashFiles('**/Cargo.lock') }}
 
-      # Build the Boa interpreter
-      - name: Build the Boa interpreter
+      - name: Benchmarking duktape
+        run: |
+          wget https://github.com/svaarala/duktape/releases/download/v2.7.0/duktape-2.7.0.tar.xz
+          tar xvfJ duktape-2.7.0.tar.xz
+          cd duktape-2.7.0
+          make -f Makefile.cmdline
+          ./duk ../data/bench/bench-v8/combined.js > ../data/bench/duktape_results.json
+      - uses: actions/setup-node@v4
+      - name: Benchmarking quickJS
+        env:
+          ESVU_PATH: ${{ github.workspace }}
+        run: |
+          npm i -g esvu
+          esvu install quickjs
+          tree -L 3 .
+          ./quickjs ../data/bench/bench-v8/combined.js > ../data/bench/quickjs_results.json
+
+      - name: Benchmarking V8
+        run: |
+          esvu install v8
+          ./v8 ../data/bench/bench-v8/combined.js > ../data/bench/v8_results.json
+
+      - name: Benchmarking Boa
         run: |
           cd boa
           cargo build --release --bin boa
-      - name: Run the benchmarks
-        run: |
-          cd boa
-          cargo run --release --bin boa -- ../data/bench/bench-v8/combined.js
+          cargo run --release --bin boa -- ../data/bench/bench-v8/combined.js > ../data/bench/boa_results.json
+
     #   - name: Commit files
     #     run: |
     #       cp -r ./results/test262/* ./data/test262/
