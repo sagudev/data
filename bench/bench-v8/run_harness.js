@@ -25,11 +25,11 @@ function AddError(name, error) {
 function AddResult(name, result) {
   // print("RESULT", name, result);
   // Print result in JSON format
-  print(`  "${name}": ${result},`);
+  print('  "' + name + '":' + result + ",");
 }
 
 function AddScore(score) {
-  print(`  "score": ${score}`);
+  print('  "score": ' + score + ",");
   print("}");
 }
 
