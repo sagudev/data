@@ -1,11 +1,11 @@
 import fs from "node:fs";
 
 const engines = new Map();
-// engines.set("boa", {});
+engines.set("boa", {});
 engines.set("v8-jitless", {});
 engines.set("libjs", {});
-// engines.set("duktape", {});
-// engines.set("quickjs", {});
+engines.set("duktape", {});
+engines.set("quickjs", {});
 
 const benchmarks = [
   "Richards",
