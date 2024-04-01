@@ -66,17 +66,20 @@ jobs:
           cargo build --release --bin boa
           cargo run --release --bin boa -- ../data/bench/bench-v8/combined.js > ../data/bench/boa_results.txt
 
-    #   - name: Commit files
-    #     run: |
-    #       cp -r ./results/test262/* ./data/test262/
-    #       cd data
-    #       git config --local user.email "action@github.com"
-    #       git config --local user.name "GitHub Action"
-    #       git add test262
-    #       git commit -m "Add new test262 results" -a
-    #   - name: Push changes
-    #     uses: ad-m/github-push-action@master
-    #     with:
-    #       github_token: ${{ secrets.GITHUB_TOKEN }}
-    #       branch: ${{ github.ref }}
-    #       directory: data
+      - name: Collate Results
+        run: |
+          node bench/gather_results.js
+
+      - name: Commit files
+        run: |
+          cd data
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add bench/results
+          git commit -m "Add new benchmark results" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          directory: data

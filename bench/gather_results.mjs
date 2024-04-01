@@ -36,7 +36,7 @@ engines.forEach((val, engine) => {
 
 // generate JSON files for each benchmark
 benchmarks.forEach((benchmark) => {
-  const data = fs.readFileSync(`./bench/results/${benchmark}.json`);
+  const data = JSON.parse(fs.readFileSync(`./bench/results/${benchmark}.json`));
   engines.forEach((val, engine) => {
     data["results"][engine].push(val[benchmark]);
   });
