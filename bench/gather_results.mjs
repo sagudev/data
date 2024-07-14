@@ -3,6 +3,7 @@ import fs from "node:fs";
 const engines = new Map();
 engines.set("boa", {});
 engines.set("v8-jitless", {});
+engines.set("sm-jitless", {});
 engines.set("libjs", {});
 engines.set("duktape", {});
 engines.set("quickjs", {});

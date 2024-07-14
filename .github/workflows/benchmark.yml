@@ -36,6 +36,11 @@ jobs:
             ~/.cargo/registry
           key: ${{ runner.os }}-cargo-benchmarks-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Benchmarking SpiderMonkey 102 --jitless
+        run: |
+          sudo apt install libmozjs-102-0 libmozjs-102-dev
+          js102 --no-jit-backend data/bench/bench-v8/combined.js > data/bench/sm-jitless_results.txt
+
       - name: Benchmarking duktape
         run: |
           wget https://github.com/svaarala/duktape/releases/download/v2.7.0/duktape-2.7.0.tar.xz
