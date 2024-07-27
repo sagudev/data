@@ -55,6 +55,11 @@ jobs:
           esvu install v8
           ./bin/v8 --jitless data/bench/bench-v8/combined.js > data/bench/v8-jitless_results.txt
 
+      - name: Benchmarking SpiderMonkey --jitless
+        run: |
+          esvu install jsshell
+          ./bin/sm --no-jit-backend data/bench/bench-v8/combined.js > data/bench/sm-jitless_results.txt
+
       - name: Benchmarking LibJS
         run: |
           esvu install libjs
